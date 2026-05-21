@@ -20,7 +20,8 @@ touch-action:none;
 height:100vh;
 display:flex;
 justify-content:center;
-align-items:center;
+align-items: flex-start; /* ★ center から変更して上基準にする */
+padding-top: 20px;       /* ★ 上に20pxだけ隙間を作って配置する */
 color:white;
 }
 
@@ -232,11 +233,11 @@ const DPR = window.devicePixelRatio || 1;
 const canvas = document.getElementById("game");
 const ctx = canvas.getContext("2d");
 
-const logicalW = 430;
-const logicalH = 760;
+const logicalW = 410;
+const logicalH = 680;
 
 // ★【追加】スマートフォンの画面高さ（ツールバー除く）に合わせる計算
-const maxH = window.innerHeight - 20; // 上下に10pxずつの余白を持たせる
+const maxH = window.innerHeight - 40; // 上下に10pxずつの余白を持たせる
 let scale = 1;
 if (logicalH > maxH) {
   scale = maxH / logicalH;
