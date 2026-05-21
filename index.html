@@ -6,7 +6,6 @@
 <title>NEO SUIKA EXTREME DX</title>
 
 <style>
-
 *{
 margin:0;
 padding:0;
@@ -15,11 +14,8 @@ box-sizing:border-box;
 
 body{
 overflow:hidden;
-background:
-radial-gradient(circle at top,#1f3b73,#0d1326 55%,#05070d);
-font-family:
-"Segoe UI",
-sans-serif;
+background:radial-gradient(circle at top,#1f3b73,#0d1326 55%,#05070d);
+font-family:"Segoe UI", sans-serif;
 touch-action:none;
 height:100vh;
 display:flex;
@@ -39,16 +35,8 @@ box-shadow:
 0 0 120px rgba(0,255,255,.15),
 inset 0 0 40px rgba(255,255,255,.08);
 background:
-linear-gradient(
-180deg,
-rgba(255,255,255,.12),
-rgba(255,255,255,.02)
-),
-linear-gradient(
-180deg,
-#fff4db,
-#ffe0b7
-);
+linear-gradient(180deg, rgba(255,255,255,.12), rgba(255,255,255,.02)),
+linear-gradient(180deg, #fff4db, #ffe0b7);
 }
 
 .overlay{
@@ -57,22 +45,35 @@ inset:0;
 pointer-events:none;
 }
 
+/* スコア・NEXTパネルを見やすいディープネイビーの半透明に変更 */
 .panel{
 position:absolute;
-background:rgba(255,255,255,.1);
+background:rgba(13, 19, 38, 0.75);
 backdrop-filter:blur(16px);
-border:
-1px solid rgba(255,255,255,.18);
+border:1px solid rgba(255,255,255,.2);
 border-radius:20px;
 padding:14px 18px;
-box-shadow:
-0 8px 25px rgba(0,0,0,.3);
+box-shadow:0 8px 25px rgba(0,0,0,0.4);
+color: #ffffff;
+text-shadow: 0 2px 4px rgba(0,0,0,0.5);
 }
 
 #scorePanel{
 top:16px;
 left:16px;
+min-width: 140px;
 }
+
+#scorePanel div {
+margin-bottom: 2px;
+font-weight: 600;
+}
+
+/* スコアを目立たせる色に変更 */
+#score { color: #fff; }
+#best { color: #ffcb00; }
+#combo { color: #ff7675; }
+#fever { color: #00ffff; }
 
 #nextPanel{
 top:16px;
@@ -112,12 +113,7 @@ text-shadow:
 .screen{
 position:absolute;
 inset:0;
-background:
-linear-gradient(
-180deg,
-rgba(0,0,0,.75),
-rgba(0,0,0,.88)
-);
+background:linear-gradient(180deg, rgba(0,0,0,.75), rgba(0,0,0,.88));
 display:flex;
 justify-content:center;
 align-items:center;
@@ -129,16 +125,7 @@ z-index:20;
 font-size:64px;
 font-weight:900;
 margin-bottom:18px;
-
-background:
-linear-gradient(
-45deg,
-#fff,
-#ff0,
-#ff9800,
-#fff
-);
-
+background:linear-gradient(45deg, #fff, #ff0, #ff9800, #fff);
 -webkit-background-clip:text;
 -webkit-text-fill-color:transparent;
 }
@@ -158,26 +145,14 @@ font-size:22px;
 font-weight:bold;
 border-radius:999px;
 cursor:pointer;
-
-background:
-linear-gradient(
-45deg,
-#ff9800,
-#ff5722
-);
-
+background:linear-gradient(45deg, #ff9800, #ff5722);
 color:white;
-
-box-shadow:
-0 10px 30px rgba(255,87,34,.4);
-
+box-shadow:0 10px 30px rgba(255,87,34,.4);
 transition:.2s;
 }
 
 button:hover{
-transform:
-translateY(-3px)
-scale(1.04);
+transform:translateY(-3px) scale(1.04);
 }
 
 .rank{
@@ -202,108 +177,60 @@ animation:warn .4s infinite;
 0%{opacity:.2;}
 100%{opacity:1;}
 }
-
 </style>
 </head>
 
 <body>
 
 <div id="wrap">
+  <canvas id="game"></canvas>
+  
+  <div class="overlay">
+    <div id="scorePanel" class="panel">
+      <div id="score">SCORE : 0</div>
+      <div id="best">BEST : 0</div>
+      <div id="combo">COMBO : 0</div>
+      <div id="fever">FEVER : OFF</div>
+    </div>
 
-<canvas id="game"></canvas>
+    <div id="nextPanel" class="panel">
+      <div style="font-weight:bold;margin-bottom:10px;color:#ffcb00;">NEXT</div>
+      <div id="next1" style="font-size:48px; line-height:1.2;"></div>
+      <div id="next2" style="font-size:34px;opacity:.6; line-height:1.2;"></div>
+    </div>
 
-<div class="overlay">
+    <div id="comboText"></div>
+    <div id="feverText">FEVER!!</div>
 
-<div id="scorePanel" class="panel">
-<div id="score">SCORE : 0</div>
-<div id="best">BEST : 0</div>
-<div id="combo">COMBO : 0</div>
-<div id="fever">FEVER : OFF</div>
-</div>
+    <div id="titleScreen" class="screen">
+      <div class="title">🍉 NEO SUIKA EXTREME DX 🍉</div>
+      <div class="sub">
+        AI生成を超えた超演出版スイカゲーム<br>
+        ぷにぷに・吸引・フィーバー・特殊果物搭載
+      </div>
+      <button id="startBtn">START GAME</button>
+    </div>
 
-<div id="nextPanel" class="panel">
-<div style="font-weight:bold;margin-bottom:10px;">
-NEXT
-</div>
-
-<div id="next1"
-style="font-size:48px;">
-</div>
-
-<div id="next2"
-style="font-size:34px;opacity:.6;">
-</div>
-</div>
-
-<div id="comboText"></div>
-
-<div id="feverText">
-FEVER!!
-</div>
-
-<div id="titleScreen" class="screen">
-
-<div class="title">
-🍉 NEO SUIKA EXTREME DX 🍉
-</div>
-
-<div class="sub">
-AI生成を超えた超演出版スイカゲーム<br>
-ぷにぷに・吸引・フィーバー・特殊果物搭載
-</div>
-
-<button id="startBtn">
-START GAME
-</button>
-
-</div>
-
-<div id="gameOverScreen"
-class="screen"
-style="display:none;">
-
-<div class="title">
-GAME OVER
-</div>
-
-<div id="finalScore"
-style="font-size:34px;margin:10px;">
-</div>
-
-<div id="finalCombo">
-</div>
-
-<div class="rank"
-id="ranking">
-</div>
-
-<button
-onclick="restartGame()"
-style="margin-top:25px;">
-RETRY
-</button>
-
-</div>
-
-</div>
+    <div id="gameOverScreen" class="screen" style="display:none;">
+      <div class="title">GAME OVER</div>
+      <div id="finalScore" style="font-size:34px;margin:10px;"></div>
+      <div id="finalCombo"></div>
+      <div class="rank" id="ranking"></div>
+      <button onclick="restartGame()" style="margin-top:25px;">RETRY</button>
+    </div>
+  </div>
 </div>
 
 <script>
-
 const DPR = window.devicePixelRatio || 1;
-
-const canvas =
-document.getElementById("game");
-
-const ctx =
-canvas.getContext("2d");
+const canvas = document.getElementById("game");
+const ctx = canvas.getContext("2d");
 
 const logicalW = 430;
 const logicalH = 760;
 
 canvas.width = logicalW * DPR;
 canvas.height = logicalH * DPR;
-
 canvas.style.width = logicalW + "px";
 canvas.style.height = logicalH + "px";
 
@@ -311,7 +238,6 @@ ctx.scale(DPR,DPR);
 
 const W = logicalW;
 const H = logicalH;
-
 const DEAD = 145;
 
 const gravity = .35;
@@ -327,1181 +253,502 @@ let combo = 0;
 let comboTimer = 0;
 let maxCombo = 0;
 
-let best =
-localStorage.getItem(
-"neo_dx_best"
-) || 0;
-
+let best = localStorage.getItem("neo_dx_best") || 0;
 let gameStarted = false;
 let gameOver = false;
-
 let nextQueue = [];
-
 let mouseX = W/2;
-
 let canDrop = true;
-
 let shake = 0;
 let hitStop = 0;
-
 let fever = false;
 let feverTimer = 0;
-
 let bgPulse = 0;
 
-const emojis = [
-"🍒","🍓","🍇","🍊","🍎",
-"🍑","🍍","🥥","🍈","🍉",
-"🌈","💣"
-];
-
+const emojis = ["🍒","🍓","🍇","🍊","🍎","🍑","🍍","🥥","🍈","🍉","🌈","💣"];
 const fruitData = [
-{r:22,color:"#ff4d4d"},
-{r:28,color:"#ff6b81"},
-{r:35,color:"#9b59b6"},
-{r:44,color:"#f39c12"},
-{r:54,color:"#e74c3c"},
-{r:66,color:"#ff7675"},
-{r:78,color:"#f1c40f"},
-{r:90,color:"#8d6e63"},
-{r:104,color:"#2ecc71"},
-{r:122,color:"#27ae60"},
-{r:138,color:"#00ffff"},
-{r:48,color:"#111"}
+  {r:22,color:"#ff4d4d"},
+  {r:28,color:"#ff6b81"},
+  {r:35,color:"#9b59b6"},
+  {r:44,color:"#f39c12"},
+  {r:54,color:"#e74c3c"},
+  {r:66,color:"#ff7675"},
+  {r:78,color:"#f1c40f"},
+  {r:90,color:"#8d6e63"},
+  {r:104,color:"#2ecc71"},
+  {r:122,color:"#27ae60"},
+  {r:138,color:"#00ffff"},
+  {r:48,color:"#111"}
 ];
 
 class AudioSystem{
-
-ctx=null;
-
-init(){
-
-if(!this.ctx){
-
-this.ctx =
-new (
-window.AudioContext ||
-window.webkitAudioContext
-)();
-
-}
-
-}
-
-tone(a,b,dur,type="sine",vol=.08){
-
-this.init();
-
-const osc =
-this.ctx.createOscillator();
-
-const gain =
-this.ctx.createGain();
-
-osc.type = type;
-
-osc.frequency.setValueAtTime(
-a,
-this.ctx.currentTime
-);
-
-osc.frequency.exponentialRampToValueAtTime(
-b,
-this.ctx.currentTime + dur
-);
-
-gain.gain.setValueAtTime(
-vol,
-this.ctx.currentTime
-);
-
-gain.gain.exponentialRampToValueAtTime(
-0.001,
-this.ctx.currentTime + dur
-);
-
-osc.connect(gain);
-
-gain.connect(this.ctx.destination);
-
-osc.start();
-
-osc.stop(
-this.ctx.currentTime + dur
-);
-
-}
-
-drop(){
-this.tone(220,100,.08,"triangle",.05);
-}
-
-merge(){
-this.tone(350,1200,.18,"sine",.12);
-}
-
-explosion(){
-this.tone(120,40,.5,"sawtooth",.2);
-}
-
-fever(){
-this.tone(600,1800,.4,"square",.08);
-}
-
-danger(){
-this.tone(180,120,.2,"triangle",.03);
-}
-
-gameover(){
-this.tone(320,40,.9,"sawtooth",.15);
-}
-
+  ctx=null;
+  init(){
+    if(!this.ctx){
+      this.ctx = new (window.AudioContext || window.webkitAudioContext)();
+    }
+  }
+  tone(a,b,dur,type="sine",vol=.08){
+    this.init();
+    const osc = this.ctx.createOscillator();
+    const gain = this.ctx.createGain();
+    osc.type = type;
+    osc.frequency.setValueAtTime(a, this.ctx.currentTime);
+    osc.frequency.exponentialRampToValueAtTime(b, this.ctx.currentTime + dur);
+    gain.gain.setValueAtTime(vol, this.ctx.currentTime);
+    gain.gain.exponentialRampToValueAtTime(0.001, this.ctx.currentTime + dur);
+    osc.connect(gain);
+    gain.connect(this.ctx.destination);
+    osc.start();
+    osc.stop(this.ctx.currentTime + dur);
+  }
+  drop(){ this.tone(220,100,.08,"triangle",.05); }
+  merge(){ this.tone(350,1200,.18,"sine",.12); }
+  explosion(){ this.tone(120,40,.5,"sawtooth",.2); }
+  fever(){ this.tone(600,1800,.4,"square",.08); }
+  danger(){ this.tone(180,120,.2,"triangle",.03); }
+  gameover(){ this.tone(320,40,.9,"sawtooth",.15); }
 }
 
 const audio = new AudioSystem();
 
 class Particle{
-
-constructor(x,y,color){
-
-this.x=x;
-this.y=y;
-
-const a=Math.random()*Math.PI*2;
-const s=Math.random()*12;
-
-this.vx=Math.cos(a)*s;
-this.vy=Math.sin(a)*s;
-
-this.life=1;
-
-this.size=
-Math.random()*10+4;
-
-this.color=color;
-
-}
-
-update(){
-
-this.vy += .18;
-
-this.x += this.vx;
-this.y += this.vy;
-
-this.life -= .03;
-
-}
-
-draw(){
-
-ctx.globalAlpha=this.life;
-
-ctx.fillStyle=this.color;
-
-ctx.beginPath();
-
-ctx.arc(
-this.x,
-this.y,
-this.size,
-0,
-Math.PI*2
-);
-
-ctx.fill();
-
-ctx.globalAlpha=1;
-
-}
-
+  constructor(x,y,color){
+    this.x=x; this.y=y;
+    const a=Math.random()*Math.PI*2;
+    const s=Math.random()*12;
+    this.vx=Math.cos(a)*s;
+    this.vy=Math.sin(a)*s;
+    this.life=1;
+    this.size=Math.random()*10+4;
+    this.color=color;
+  }
+  update(){
+    this.vy += .18;
+    this.x += this.vx;
+    this.y += this.vy;
+    this.life -= .03;
+  }
+  draw(){
+    ctx.globalAlpha=this.life;
+    ctx.fillStyle=this.color;
+    ctx.beginPath();
+    ctx.arc(this.x,this.y,this.size,0,Math.PI*2);
+    ctx.fill();
+    ctx.globalAlpha=1;
+  }
 }
 
 class Shockwave{
-
-constructor(x,y,color){
-
-this.x=x;
-this.y=y;
-
-this.r=20;
-
-this.life=1;
-
-this.color=color;
-
-}
-
-update(){
-
-this.r += 12;
-
-this.life -= .04;
-
-}
-
-draw(){
-
-ctx.globalAlpha=this.life;
-
-ctx.strokeStyle=this.color;
-
-ctx.lineWidth=6;
-
-ctx.beginPath();
-
-ctx.arc(
-this.x,
-this.y,
-this.r,
-0,
-Math.PI*2
-);
-
-ctx.stroke();
-
-ctx.globalAlpha=1;
-
-}
-
+  constructor(x,y,color){
+    this.x=x; this.y=y; this.r=20; this.life=1; this.color=color;
+  }
+  update(){
+    this.r += 12;
+    this.life -= .04;
+  }
+  draw(){
+    ctx.globalAlpha=this.life;
+    ctx.strokeStyle=this.color;
+    ctx.lineWidth=6;
+    ctx.beginPath();
+    ctx.arc(this.x,this.y,this.r,0,Math.PI*2);
+    ctx.stroke();
+    ctx.globalAlpha=1;
+  }
 }
 
 class Fruit{
+  constructor(x,y,lv){
+    this.x=x; this.y=y;
+    this.vx=0; this.vy=0;
+    this.lv=lv;
+    this.r=fruitData[lv].r;
+    this.rot=0;
+    this.scaleX=1; this.scaleY=1;
+    this.glow=0;
+  }
+  update(){
+    this.vy += gravity;
+    this.x += this.vx;
+    this.y += this.vy;
+    this.rot += this.vx*.01;
+    this.scaleX += (1-this.scaleX)*.15;
+    this.scaleY += (1-this.scaleY)*.15;
+    this.glow *= .92;
 
-constructor(x,y,lv){
-
-this.x=x;
-this.y=y;
-
-this.vx=0;
-this.vy=0;
-
-this.lv=lv;
-
-this.r=
-fruitData[lv].r;
-
-this.rot=0;
-
-this.scaleX=1;
-this.scaleY=1;
-
-this.glow=0;
-
-}
-
-update(){
-
-this.vy += gravity;
-
-this.x += this.vx;
-this.y += this.vy;
-
-this.rot += this.vx*.01;
-
-this.scaleX +=
-(1-this.scaleX)*.15;
-
-this.scaleY +=
-(1-this.scaleY)*.15;
-
-this.glow *= .92;
-
-if(this.x-this.r<0){
-
-this.x=this.r;
-
-this.vx *= -bounce;
-
-}
-
-if(this.x+this.r>W){
-
-this.x=W-this.r;
-
-this.vx *= -bounce;
-
-}
-
-if(this.y+this.r>H){
-
-this.y=H-this.r;
-
-this.vy *= -bounce;
-
-this.vx *= friction;
-
-}
-
-}
-
-draw(){
-
-ctx.save();
-
-ctx.translate(this.x,this.y);
-
-ctx.rotate(this.rot);
-
-ctx.scale(this.scaleX,this.scaleY);
-
-ctx.shadowBlur =
-20 + this.glow;
-
-ctx.shadowColor =
-fruitData[this.lv].color;
-
-ctx.font =
-`${this.r*1.5}px serif`;
-
-ctx.textAlign="center";
-ctx.textBaseline="middle";
-
-ctx.fillText(
-emojis[this.lv],
-0,
-0
-);
-
-ctx.restore();
-
-}
-
+    if(this.x-this.r<0){ this.x=this.r; this.vx *= -bounce; }
+    if(this.x+this.r>W){ this.x=W-this.r; this.vx *= -bounce; }
+    if(this.y+this.r>H){ this.y=H-this.r; this.vy *= -bounce; this.vx *= friction; }
+  }
+  draw(){
+    ctx.save();
+    ctx.translate(this.x,this.y);
+    ctx.rotate(this.rot);
+    ctx.scale(this.scaleX,this.scaleY);
+    
+    ctx.shadowBlur = 20 + this.glow;
+    ctx.shadowColor = fruitData[this.lv].color;
+    
+    ctx.font = `${this.r*1.5}px serif`;
+    ctx.textAlign="center";
+    ctx.textBaseline="middle";
+    
+    // 【バグ修正】絵文字が白化するのを防ぐため、描画直前に色を指定
+    ctx.fillStyle = "#ffffff";
+    
+    ctx.fillText(emojis[this.lv], 0, 0);
+    ctx.restore();
+  }
 }
 
 function randomFruit(){
-
-const r=Math.random();
-
-if(r<.32)return 0;
-if(r<.56)return 1;
-if(r<.75)return 2;
-if(r<.88)return 3;
-if(r<.95)return 4;
-
-if(Math.random()<.04)
-return 10;
-
-if(Math.random()<.02)
-return 11;
-
-return 5;
-
+  const r=Math.random();
+  if(r<.32)return 0;
+  if(r<.56)return 1;
+  if(r<.75)return 2;
+  if(r<.88)return 3;
+  if(r<.95)return 4;
+  if(Math.random()<.04) return 10;
+  if(Math.random()<.02) return 11;
+  return 5;
 }
 
 function refillQueue(){
-
-while(nextQueue.length<2){
-
-nextQueue.push(
-randomFruit()
-);
-
-}
-
+  while(nextQueue.length<2){
+    nextQueue.push(randomFruit());
+  }
 }
 
 function spawnFruit(){
+  if(!canDrop)return;
+  canDrop=false;
+  setTimeout(()=>{ canDrop=true; },300);
 
-if(!canDrop)return;
-
-canDrop=false;
-
-setTimeout(()=>{
-canDrop=true;
-},300);
-
-const lv=nextQueue.shift();
-
-refillQueue();
-
-const f=
-new Fruit(mouseX,85,lv);
-
-fruits.push(f);
-
-audio.drop();
-
+  const lv=nextQueue.shift();
+  refillQueue();
+  const f=new Fruit(mouseX,85,lv);
+  fruits.push(f);
+  audio.drop();
 }
 
 function addEffects(x,y,color){
-
-for(let i=0;i<20;i++){
-
-particles.push(
-new Particle(x,y,color)
-);
-
-}
-
-shockwaves.push(
-new Shockwave(x,y,color)
-);
-
+  for(let i=0;i<20;i++){
+    particles.push(new Particle(x,y,color));
+  }
+  shockwaves.push(new Shockwave(x,y,color));
 }
 
 function startFever(){
-
-fever=true;
-
-feverTimer=900;
-
-audio.fever();
-
-const el=
-document.getElementById(
-"feverText"
-);
-
-el.style.opacity=1;
-
-setTimeout(()=>{
-el.style.opacity=0;
-},1200);
-
+  fever=true;
+  feverTimer=900;
+  audio.fever();
+  const el=document.getElementById("feverText");
+  el.style.opacity=1;
+  setTimeout(()=>{ el.style.opacity=0; },1200);
 }
 
 function showCombo(v){
+  const el=document.getElementById("comboText");
+  let label="";
+  if(v<4)label=v+" COMBO!";
+  else if(v<8)label="SUPER "+v;
+  else if(v<12)label="MEGA "+v;
+  else label="ULTRA "+v;
 
-const el=
-document.getElementById(
-"comboText"
-);
-
-let label="";
-
-if(v<4)label=v+" COMBO!";
-else if(v<8)label="SUPER "+v;
-else if(v<12)label="MEGA "+v;
-else label="ULTRA "+v;
-
-el.innerText=label;
-
-el.style.opacity=1;
-
-el.style.transform=
-"translateX(-50%) scale(1.5)";
-
-setTimeout(()=>{
-
-el.style.opacity=0;
-
-el.style.transform=
-"translateX(-50%) scale(1)";
-
-},350);
-
+  el.innerText=label;
+  el.style.opacity=1;
+  el.style.transform="translateX(-50%) scale(1.5)";
+  setTimeout(()=>{
+    el.style.opacity=0;
+    el.style.transform="translateX(-50%) scale(1)";
+  },350);
 }
 
 function merge(a,b){
+  const lv=a.lv;
+  const x=(a.x+b.x)/2;
+  const y=(a.y+b.y)/2;
 
-const lv=a.lv;
+  if(lv===11){
+    audio.explosion();
+    shake=25;
+    for(let i=fruits.length-1;i>=0;i--){
+      const f=fruits[i];
+      const dx=f.x-x; const dy=f.y-y;
+      const d=Math.hypot(dx,dy);
+      if(d<150){
+        score += 50;
+        fruits.splice(i,1);
+      }
+    }
+    return;
+  }
 
-const x=(a.x+b.x)/2;
-const y=(a.y+b.y)/2;
+  addEffects(x,y,fruitData[lv].color);
+  audio.merge();
+  shake=16;
+  hitStop=3;
+  combo++;
+  comboTimer=180;
+  if(combo>maxCombo) maxCombo=combo;
 
-if(lv===11){
+  let add=(lv+1)*15*combo;
+  if(fever) add*=2;
+  score += add;
+  showCombo(combo);
 
-audio.explosion();
+  if(combo>=8 && !fever){
+    startFever();
+  }
 
-shake=25;
+  fruits.splice(fruits.indexOf(a),1);
+  fruits.splice(fruits.indexOf(b),1);
 
-for(let i=fruits.length-1;i>=0;i--){
-
-const f=fruits[i];
-
-const dx=f.x-x;
-const dy=f.y-y;
-
-const d=Math.hypot(dx,dy);
-
-if(d<150){
-
-score += 50;
-
-fruits.splice(i,1);
-
-}
-
-}
-
-return;
-
-}
-
-addEffects(
-x,
-y,
-fruitData[lv].color
-);
-
-audio.merge();
-
-shake=16;
-
-hitStop=3;
-
-combo++;
-
-comboTimer=180;
-
-if(combo>maxCombo)
-maxCombo=combo;
-
-let add=
-(lv+1)*15*combo;
-
-if(fever)
-add*=2;
-
-score += add;
-
-showCombo(combo);
-
-if(combo>=8 && !fever){
-
-startFever();
-
-}
-
-fruits.splice(
-fruits.indexOf(a),
-1
-);
-
-fruits.splice(
-fruits.indexOf(b),
-1
-);
-
-if(lv<10){
-
-const nf=
-new Fruit(x,y,lv+1);
-
-nf.vy=-7;
-
-nf.scaleX=1.5;
-nf.scaleY=.6;
-
-nf.glow=40;
-
-fruits.push(nf);
-
-}
-
+  if(lv<10){
+    const nf=new Fruit(x,y,lv+1);
+    nf.vy=-7;
+    nf.scaleX=1.5; nf.scaleY=.6;
+    nf.glow=40;
+    fruits.push(nf);
+  }
 }
 
 function collision(){
+  for(let i=0;i<fruits.length;i++){
+    for(let j=i+1;j<fruits.length;j++){
+      const a=fruits[i];
+      const b=fruits[j];
+      const dx=b.x-a.x;
+      const dy=b.y-a.y;
+      const dist=Math.hypot(dx,dy);
+      const min=a.r+b.r;
 
-for(let i=0;i<fruits.length;i++){
+      if(a.lv===b.lv && dist<min+14){
+        const pull=.015;
+        a.vx += dx*pull; a.vy += dy*pull;
+        b.vx -= dx*pull; b.vy -= dy*pull;
+      }
 
-for(let j=i+1;j<fruits.length;j++){
+      if(dist<min){
+        if(a.lv===b.lv){
+          merge(a,b);
+          return;
+        }
 
-const a=fruits[i];
-const b=fruits[j];
+        const nx=dx/(dist||1);
+        const ny=dy/(dist||1);
+        const overlap=min-dist;
+        const correction=overlap*.5*.8;
 
-const dx=b.x-a.x;
-const dy=b.y-a.y;
+        a.x -= nx*correction; a.y -= ny*correction;
+        b.x += nx*correction; b.y += ny*correction;
 
-const dist=Math.hypot(dx,dy);
+        const rvx=b.vx-a.vx; const rvy=b.vy-a.vy;
+        const vel=rvx*nx+rvy*ny;
 
-const min=a.r+b.r;
+        if(vel<0){
+          const imp=-(1+bounce)*vel/2;
+          const ix=imp*nx; const iy=imp*ny;
+          a.vx -= ix; a.vy -= iy;
+          b.vx += ix; b.vy += iy;
+        }
 
-if(
-a.lv===b.lv &&
-dist<min+14
-){
-
-const pull=.015;
-
-a.vx += dx*pull;
-a.vy += dy*pull;
-
-b.vx -= dx*pull;
-b.vy -= dy*pull;
-
-}
-
-if(dist<min){
-
-if(a.lv===b.lv){
-
-merge(a,b);
-
-return;
-
-}
-
-const nx=dx/(dist||1);
-const ny=dy/(dist||1);
-
-const overlap=min-dist;
-
-const correction=
-overlap*.5*.8;
-
-a.x -= nx*correction;
-a.y -= ny*correction;
-
-b.x += nx*correction;
-b.y += ny*correction;
-
-const rvx=b.vx-a.vx;
-const rvy=b.vy-a.vy;
-
-const vel=
-rvx*nx+rvy*ny;
-
-if(vel<0){
-
-const imp=
--(1+bounce)*vel/2;
-
-const ix=imp*nx;
-const iy=imp*ny;
-
-a.vx -= ix;
-a.vy -= iy;
-
-b.vx += ix;
-b.vy += iy;
-
-}
-
-a.scaleX=1.18;
-a.scaleY=.84;
-
-b.scaleX=1.18;
-b.scaleY=.84;
-
-}
-
-}
-
-}
-
+        a.scaleX=1.18; a.scaleY=.84;
+        b.scaleX=1.18; b.scaleY=.84;
+      }
+    }
+  }
 }
 
 function update(){
+  if(hitStop>0){ hitStop--; return; }
+  if(fever){
+    feverTimer--;
+    bgPulse += .04;
+    if(feverTimer<=0){ fever=false; }
+  }
 
-if(hitStop>0){
+  comboTimer--;
+  if(comboTimer<=0){ combo=0; }
 
-hitStop--;
+  for(let f of fruits){ f.update(); }
 
-return;
+  for(let i=particles.length-1; i>=0; i--){
+    particles[i].update();
+    if(particles[i].life<=0){ particles.splice(i,1); }
+  }
 
-}
+  for(let i=shockwaves.length-1; i>=0; i--){
+    shockwaves[i].update();
+    if(shockwaves[i].life<=0){ shockwaves.splice(i,1); }
+  }
 
-if(fever){
-
-feverTimer--;
-
-bgPulse += .04;
-
-if(feverTimer<=0){
-
-fever=false;
-
-}
-
-}
-
-comboTimer--;
-
-if(comboTimer<=0){
-
-combo=0;
-
-}
-
-for(let f of fruits){
-
-f.update();
-
-}
-
-for(
-let i=particles.length-1;
-i>=0;
-i--
-){
-
-particles[i].update();
-
-if(
-particles[i].life<=0
-){
-
-particles.splice(i,1);
-
-}
-
-}
-
-for(
-let i=shockwaves.length-1;
-i>=0;
-i--
-){
-
-shockwaves[i].update();
-
-if(
-shockwaves[i].life<=0
-){
-
-shockwaves.splice(i,1);
-
-}
-
-}
-
-collision();
-
-checkGameOver();
-
-shake *= .9;
-
+  collision();
+  checkGameOver();
+  shake *= .9;
 }
 
 function checkGameOver(){
+  let over=false;
+  for(let f of fruits){
+    if(f.y-f.r<DEAD && Math.abs(f.vy)<1){ over=true; break; }
+  }
 
-let over=false;
+  if(over){
+    window.deadCounter=(window.deadCounter||0)+1;
+    if(window.deadCounter%40===0){ audio.danger(); }
+  }else{
+    window.deadCounter=0;
+  }
 
-for(let f of fruits){
-
-if(
-f.y-f.r<DEAD &&
-Math.abs(f.vy)<1
-){
-
-over=true;
-
-break;
-
-}
-
-}
-
-if(over){
-
-window.deadCounter=
-(window.deadCounter||0)+1;
-
-if(window.deadCounter%40===0){
-
-audio.danger();
-
-}
-
-}else{
-
-window.deadCounter=0;
-
-}
-
-if(window.deadCounter>150){
-
-gameOver=true;
-
-audio.gameover();
-
-showGameOver();
-
-}
-
+  if(window.deadCounter>150){
+    gameOver=true;
+    audio.gameover();
+    showGameOver();
+  }
 }
 
 function drawBackground(){
+  if(fever){
+    ctx.fillStyle=`rgba(255,${100+Math.sin(bgPulse)*100},0,.12)`;
+    ctx.fillRect(0,0,W,H);
+  }
 
-if(fever){
-
-ctx.fillStyle=
-`rgba(
-255,
-${100+Math.sin(bgPulse)*100},
-0,
-.12
-)`;
-
-ctx.fillRect(0,0,W,H);
-
-}
-
-for(let i=0;i<25;i++){
-
-ctx.fillStyle=
-`rgba(255,255,255,${
-Math.sin(
-Date.now()*.001+i
-)*.25+.2
-})`;
-
-ctx.beginPath();
-
-ctx.arc(
-(Math.sin(Date.now()*.0003+i)*.5+.5)*W,
-(i*40+Date.now()*.03)%H,
-2+Math.sin(i)*2,
-0,
-Math.PI*2
-);
-
-ctx.fill();
-
-}
-
+  for(let i=0;i<25;i++){
+    ctx.fillStyle=`rgba(255,255,255,${Math.sin(Date.now()*.001+i)*.25+.2})`;
+    ctx.beginPath();
+    ctx.arc(
+      (Math.sin(Date.now()*.0003+i)*.5+.5)*W,
+      (i*40+Date.now()*.03)%H,
+      2+Math.sin(i)*2,0,Math.PI*2
+    );
+    ctx.fill();
+  }
 }
 
 function draw(){
+  ctx.clearRect(0,0,W,H);
+  ctx.save();
+  ctx.translate((Math.random()-.5)*shake,(Math.random()-.5)*shake);
 
-ctx.clearRect(0,0,W,H);
+  drawBackground();
 
-ctx.save();
+  ctx.strokeStyle=window.deadCounter>60
+    ? `rgba(255,0,0,${Math.sin(Date.now()*.03)*.5+.5})`
+    : "rgba(255,255,255,.25)";
+  ctx.lineWidth=5;
+  ctx.beginPath();
+  ctx.moveTo(0,DEAD);
+  ctx.lineTo(W,DEAD);
+  ctx.stroke();
 
-ctx.translate(
-(Math.random()-.5)*shake,
-(Math.random()-.5)*shake
-);
+  for(let s of shockwaves){ s.draw(); }
+  for(let p of particles){ p.draw(); }
+  for(let f of fruits){ f.draw(); }
 
-drawBackground();
+  if(gameStarted && !gameOver){
+    ctx.globalAlpha=.25;
+    ctx.font=`${fruitData[nextQueue[0]].r*1.5}px serif`;
+    ctx.textAlign="center";
+    
+    // 予測フルーツ描画直前にも色をリセット
+    ctx.fillStyle = "#ffffff";
+    ctx.fillText(emojis[nextQueue[0]], mouseX, 95);
+    ctx.globalAlpha=1;
 
-ctx.strokeStyle=
-window.deadCounter>60
-?
-`rgba(
-255,
-0,
-0,
-${Math.sin(Date.now()*.03)*.5+.5}
-)`
-:
-"rgba(255,255,255,.25)";
+    ctx.strokeStyle="rgba(0,0,0,.15)"; // 落下予測線を少し見やすく調整
+    ctx.beginPath();
+    ctx.moveTo(mouseX,85);
+    ctx.lineTo(mouseX,H);
+    ctx.stroke();
+  }
 
-ctx.lineWidth=5;
-
-ctx.beginPath();
-
-ctx.moveTo(0,DEAD);
-
-ctx.lineTo(W,DEAD);
-
-ctx.stroke();
-
-for(let s of shockwaves){
-
-s.draw();
-
-}
-
-for(let p of particles){
-
-p.draw();
-
-}
-
-for(let f of fruits){
-
-f.draw();
-
-}
-
-if(
-gameStarted &&
-!gameOver
-){
-
-ctx.globalAlpha=.25;
-
-ctx.font=
-`${fruitData[
-nextQueue[0]
-].r*1.5}px serif`;
-
-ctx.textAlign="center";
-
-ctx.fillText(
-emojis[nextQueue[0]],
-mouseX,
-95
-);
-
-ctx.globalAlpha=1;
-
-ctx.strokeStyle=
-"rgba(255,255,255,.25)";
-
-ctx.beginPath();
-
-ctx.moveTo(mouseX,85);
-
-ctx.lineTo(mouseX,H);
-
-ctx.stroke();
-
-}
-
-ctx.restore();
-
-updateUI();
-
+  ctx.restore();
+  updateUI();
 }
 
 function updateUI(){
-
-document.getElementById(
-"score"
-).innerText=
-"SCORE : "+score;
-
-document.getElementById(
-"best"
-).innerText=
-"BEST : "+best;
-
-document.getElementById(
-"combo"
-).innerText=
-"COMBO : "+combo;
-
-document.getElementById(
-"fever"
-).innerText=
-"FEVER : "+
-(fever?"ON":"OFF");
-
-document.getElementById(
-"next1"
-).innerText=
-emojis[nextQueue[0]];
-
-document.getElementById(
-"next2"
-).innerText=
-emojis[nextQueue[1]];
-
+  document.getElementById("score").innerText="SCORE : "+score;
+  document.getElementById("best").innerText="BEST : "+best;
+  document.getElementById("combo").innerText="COMBO : "+combo;
+  document.getElementById("fever").innerText="FEVER : "+(fever?"ON toggle":"OFF");
+  document.getElementById("next1").innerText=emojis[nextQueue[0]];
+  document.getElementById("next2").innerText=emojis[nextQueue[1]];
 }
 
 function showGameOver(){
+  if(score>best){
+    best=score;
+    localStorage.setItem("neo_dx_best",best);
+  }
 
-if(score>best){
+  const ranks=JSON.parse(localStorage.getItem("neo_dx_ranks")||"[]");
+  ranks.push(score);
+  ranks.sort((a,b)=>b-a);
+  ranks.splice(5);
+  localStorage.setItem("neo_dx_ranks",JSON.stringify(ranks));
 
-best=score;
+  document.getElementById("finalScore").innerText="SCORE : "+score;
+  document.getElementById("finalCombo").innerText="MAX COMBO : "+maxCombo;
 
-localStorage.setItem(
-"neo_dx_best",
-best
-);
+  const rank=document.getElementById("ranking");
+  rank.innerHTML="<h3>TOP 5</h3>";
+  ranks.forEach((s,i)=>{
+    const d=document.createElement("div");
+    d.innerHTML=`${i+1}. ${s}`;
+    if(s===score){
+      d.classList.add("you");
+      d.innerHTML += " ← YOU";
+    }
+    rank.appendChild(d);
+  });
 
-}
-
-const ranks=
-JSON.parse(
-localStorage.getItem(
-"neo_dx_ranks"
-)||"[]"
-);
-
-ranks.push(score);
-
-ranks.sort((a,b)=>b-a);
-
-ranks.splice(5);
-
-localStorage.setItem(
-"neo_dx_ranks",
-JSON.stringify(ranks)
-);
-
-document.getElementById(
-"finalScore"
-).innerText=
-"SCORE : "+score;
-
-document.getElementById(
-"finalCombo"
-).innerText=
-"MAX COMBO : "+maxCombo;
-
-const rank=
-document.getElementById(
-"ranking"
-);
-
-rank.innerHTML=
-"<h3>TOP 5</h3>";
-
-ranks.forEach((s,i)=>{
-
-const d=
-document.createElement("div");
-
-d.innerHTML=
-`${i+1}. ${s}`;
-
-if(s===score){
-
-d.classList.add("you");
-
-d.innerHTML +=
-" ← YOU";
-
-}
-
-rank.appendChild(d);
-
-});
-
-document.getElementById(
-"gameOverScreen"
-).style.display="flex";
-
+  document.getElementById("gameOverScreen").style.display="flex";
 }
 
 function restartGame(){
-
-fruits=[];
-particles=[];
-shockwaves=[];
-
-score=0;
-
-combo=0;
-
-maxCombo=0;
-
-fever=false;
-
-window.deadCounter=0;
-
-gameOver=false;
-
-nextQueue=[];
-
-refillQueue();
-
-document.getElementById(
-"gameOverScreen"
-).style.display="none";
-
+  fruits=[]; particles=[]; shockwaves=[];
+  score=0; combo=0; maxCombo=0; fever=false;
+  window.deadCounter=0; gameOver=false;
+  nextQueue=[];
+  refillQueue();
+  document.getElementById("gameOverScreen").style.display="none";
 }
 
 function loop(){
-
-if(
-gameStarted &&
-!gameOver
-){
-
-update();
-
-}
-
-draw();
-
-requestAnimationFrame(loop);
-
+  if(gameStarted && !gameOver){ update(); }
+  draw();
+  requestAnimationFrame(loop);
 }
 
 function updateMouse(clientX){
-
-const rect=
-canvas.getBoundingClientRect();
-
-mouseX=
-clientX-rect.left;
-
+  const rect=canvas.getBoundingClientRect();
+  mouseX=clientX-rect.left;
 }
 
-canvas.addEventListener(
-"mousemove",
-e=>{
+canvas.addEventListener("mousemove", e=>{ updateMouse(e.clientX); });
+canvas.addEventListener("touchmove", e=>{
+  e.preventDefault();
+  updateMouse(e.touches[0].clientX);
+}, {passive:false});
 
-updateMouse(e.clientX);
+canvas.addEventListener("mousedown", ()=>{ if(gameStarted && !gameOver){ spawnFruit(); } });
+canvas.addEventListener("touchstart", e=>{
+  e.preventDefault();
+  if(gameStarted && !gameOver){
+    spawnFruit();
+    if(navigator.vibrate){ navigator.vibrate(10); }
+  }
+}, {passive:false});
 
-}
-);
-
-canvas.addEventListener(
-"touchmove",
-e=>{
-
-e.preventDefault();
-
-updateMouse(
-e.touches[0].clientX
-);
-
-},
-{passive:false}
-);
-
-canvas.addEventListener(
-"mousedown",
-()=>{
-
-if(
-gameStarted &&
-!gameOver
-){
-
-spawnFruit();
-
-}
-
-}
-);
-
-canvas.addEventListener(
-"touchstart",
-e=>{
-
-e.preventDefault();
-
-if(
-gameStarted &&
-!gameOver
-){
-
-spawnFruit();
-
-if(
-navigator.vibrate
-){
-
-navigator.vibrate(10);
-
-}
-
-}
-
-},
-{passive:false}
-);
-
-document.getElementById(
-"startBtn"
-).addEventListener(
-"click",
-()=>{
-
-gameStarted=true;
-
-refillQueue();
-
-document.getElementById(
-"titleScreen"
-).style.display="none";
-
-}
-);
+document.getElementById("startBtn").addEventListener("click", ()=>{
+  gameStarted=true;
+  refillQueue();
+  document.getElementById("titleScreen").style.display="none";
+});
 
 loop();
-
 </script>
-
 </body>
 </html>
-
-<!-- 完成しました -->
